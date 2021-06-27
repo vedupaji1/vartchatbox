@@ -110,7 +110,8 @@
         }
 
         .text_part {
-            width: 70rem;
+            width:auto;
+            max-width: 70rem;
             height: auto;
             border-color: rgb(232, 232, 232);
             font-size: 150%;
@@ -121,29 +122,15 @@
         }
 
         .author_name {
-            margin-top: 0;
-            width: 70rem;
-
-        }
-
-        .author_name p {
             margin-top: 0.2rem;
-            margin-bottom: 0;
-            margin-left: 3rem;
+            margin-left: 1rem;
             font-family: 'Roboto', sans-serif;
             color: rgb(61, 61, 61);
             font-size: 1.5rem;
         }
 
-        .content_1 {
-            width: 70rem;
-            height: auto;
-        }
-
-        .content_1 pre {
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-            margin-left: 1rem;
+        .content_1{
+            margin: 0.5rem 1rem 0.5rem 1rem;
             color: rgb(90, 90, 90);
             font-family: Verdana, Geneva, Tahoma, sans-serif;
             white-space: pre-wrap;
@@ -154,8 +141,14 @@
             /* Opera 4-6 */
             white-space: -o-pre-wrap;
             word-wrap: break-word;
+        }
 
-
+        .new_div_op{
+            height:auto;
+            width: 70rem;
+            display: flex;
+            flex-direction: column;
+            align-items: baseline;
         }
 
         .hide_op {
@@ -177,13 +170,11 @@
                 width: 60rem;
             }
 
-            .text_part,
-            .author_name {
-                width: 52rem;
+            .text_part {
+                max-width: 52rem;
             }
-
-            .content_1 {
-                width: 50rem;
+            .new_div_op{
+                width: 52rem;
             }
 
             .text_area {
@@ -205,13 +196,11 @@
                 width: 40rem;
             }
 
-            .text_part,
-            .author_name {
-                width: 38rem;
+            .text_part {
+                max-width: 38rem;
             }
-
-            .content_1 {
-                width: 35rem;
+            .new_div_op{
+                width: 38rem;
             }
 
             .text_area {
@@ -236,15 +225,10 @@
             }
 
             .text_part {
-                width: 32rem;
+                max-width: 32rem;
             }
-
-            .author_name {
+            .new_div_op{
                 width: 32rem;
-            }
-
-            .content_1 {
-                width: 30rem;
             }
 
             .text_area {
@@ -268,7 +252,9 @@
     <div class="main_div">
         <div class="main_div1">
             <div class="main_div2">
+                <div class="new_div_op">
                 <div class="appa1"></div>
+                </div>
             </div>
             <div class="inp">
                 <textarea class="text_area" name="" id=""></textarea>
@@ -303,12 +289,10 @@
                 "username": user_name1
             });
             text_ar.value = "";
-            create_text1.insertAdjacentHTML("beforebegin", `<div style="background-color:#1c84ff;color:white;display:flex;align-items:center;" class="text_part">
-                
-                    <div class="content_1">
-                        <pre style="color:rgb(250 250 250);">${message_data}</pre>
-                    </div>
-                </div>` );
+            create_text1.insertAdjacentHTML("beforebegin", 
+            `<div style="background-color:#1c84ff;color:white;display:flex;align-items:center;" class="text_part">
+             <pre class="content_1" style="color:rgb(250 250 250);margin-left:1rem;">${message_data}</pre>     
+             </div>` );
             elmnt.scrollTop = elmnt.scrollHeight;
 
         }
@@ -321,16 +305,9 @@
         socket.on('get_message', (message_data) => {
             console.log(message_data)
             create_text1 = document.getElementsByClassName("appa1")[0];
-
-            let elem = `<div class="text_part">
-                    <div class="author_name">
-                     <p style="color: rgb(1 150 255);">${message_data.username}</p>
-                    </div>
-                    <div class="content_1">
-                        <pre>${message_data.message}</pre>
-                    </div>
-                </div>`;
-            create_text1.insertAdjacentHTML("beforebegin", elem);
+            create_text1.insertAdjacentHTML("beforebegin", `<div class="text_part">                              
+                        <pre class="content_1" ><span class="author_name" style="color: rgb(1 150 255);">${message_data.username}</span> ${message_data.message}</pre>
+                </div>` );
             elmnt.scrollTop = elmnt.scrollHeight;
         })
 
