@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://drive.google.com/uc?export=download&id=1edu1ZtUJD3NkeUCUa-jsEt1igkqM9HYz">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>VARtchat</title>
+
+
+    <style>
+        html {
+            font-size: 62.5%;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            margin: 0%;
+            padding: 0%;
+        }
+
+        .head {
+            width: 100%;
+            height: 6rem;
+            background-color: rgb(0, 0, 0);
+            position: absolute;
+            z-index: 2;
+        }
+
+        .heading {
+            margin-left: 5rem;
+            color: white;
+            margin-top: 1rem;
+            font-size: 3.5rem;
+        }
+
+        .div10 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .div11 {
+            height: auto;
+            width: auto;
+            box-shadow: 0 0.2rem 0.4rem rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+            padding: 2rem 3rem 5rem 3rem;
+            margin-top: 8rem;
+            background-color: white;
+            border-radius: 1rem;
+        }
+
+        input {
+            height: 2rem;
+            width: 25rem;
+            margin-top: 1.5rem;
+            border-radius: 0.6rem;
+            border: 1px solid #dddfe2;
+            padding: 1rem;
+        }
+
+        .butu1 {
+            height: 5rem;
+            margin-top: 2rem;
+            width: 27rem;
+            border-radius: 0.6rem;
+            height: 3.5rem;
+            background-color: #3f8bf1;
+            transition: background-color 0.3s;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 150%;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #006eff;
+            box-shadow: 0.05rem 0.05rem 0.3rem 0.005rem #006eff;
+        }
+
+
+        .butu1:hover {
+            background-color: #006eff;
+        }
+
+        #op_110 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .imma_op {
+            margin: 0.1rem;
+
+        }
+
+        .imma_op:hover {
+            box-shadow: 0rem 0.2rem 0.9rem 0.05rem #5e5e5e;
+            /*box-shadow:   0rem 0.2rem 0.5rem 0.05rem #5e5e5e;*/
+        }
+
+        input#search_image_op {
+            background: none;
+            border: none;
+            border-bottom: solid 0.1rem #3f8bf1;
+            border-radius: 0;
+
+        }
+
+        input#search_image_op:focus {
+            border-color: none;
+            box-shadow: none;
+        }
+
+        .image_selection_10 {
+            display: inline-block;
+        }
+
+        .search_box_div {
+            position: relative;
+            margin: 0rem 0 2.5rem 0;
+            transition: all 0.4s;
+
+            opacity: 0;
+
+
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="head">
+        <h1 class="heading"><span style="color: red;">VAR</span>tworld</h1>
+    </div>
+    <div class="div10">
+        <div class="div11">
+            <input type="text" placeholder="Enter Your Name" id="user_name" value="" required><br>
+            <input type="text" placeholder="Enter Your Room Number" id="room_detail" value="" required><br>
+            <button style="background-color: #4cb9da;" class="butu1" onclick="unhide_search_div()">Profile
+                Picture</button><br>
+            <button class="butu1 but_hide" onclick="send_details(1)">Join</button><br>
+            <p style="margin: 1rem 0rem 0rem 12.5rem;font-size: 150%;font-weight: bold;color: #4e4b4b;">Or</p>
+            <button style="margin-top: 1rem;" class="butu1 but_hide" onclick="send_details(2)">Create</button>
+        </div>
+
+        <div class="search_box_div" style="">
+            <input type="text" id="search_image_op" class="search_image_10" value=""
+                placeholder="Enter Your Image Choice" required>
+            <div class="image_selection_10" onclick="searching_image()"><i class="fa fa-search" aria-hidden="true"
+                    style="font-size: 1rem;font-size: 2.5rem;color: #3f8bf1;"></i></div>
+        </div>
+        <button style="margin-bottom: 2.5rem;" class="butu1 but_hide  ppbut" onclick="seleted_img()">Select</button>
+        <div style="transition: opacity 0.5s;" id="op_110">
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementsByClassName("ppbut")[0].style.opacity = "0";
+        const unhide_search_div = () => {
+            document.getElementsByClassName("search_box_div")[0].style.opacity = "1";
+            document.getElementsByClassName("ppbut")[0].style.opacity = "1"
+            document.getElementsByClassName("search_box_div")[0].style.marginTop = "5rem";
+        }
+    </script>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io();
+        let profile_select = 0;
+
+        let api_data;
+        let selected_image_details = {}
+        let prev_image_num = 16;
+
+        const seleted_img = () => {
+            if (prev_image_num == 16) {
+                alert(`Please Select Any Picture`);
+            }
+            else {
+                profile_select = 1;
+                document.getElementsByClassName("search_box_div")[0].style.opacity = "0";
+                document.getElementsByClassName("ppbut")[0].style.opacity = "0";
+                document.getElementById("op_110").style.opacity = "0";
+            }
+        }
+
+        const set_image_number = (image_num) => {
+            try {
+                if (prev_image_num != 16) {
+                    document.getElementsByClassName("imma_op")[prev_image_num].style.boxShadow = "none";
+                    console.log(prev_image_num + "kkk");
+                }
+                selected_image_details.index_num = image_num;
+                selected_image_details.image_src = api_data[(api_data.length-1)-image_num].src.tiny;
+                console.log(selected_image_details)
+                prev_image_num = image_num;
+                document.getElementsByClassName("imma_op")[image_num].style.boxShadow = "0rem 0rem 0rem 0.2rem #3f8bf1";
+            }
+            catch(err)
+            {
+                alert(`Something Went Wrong`);
+            }
+            
+        }
+
+        const set_api_photos = () => {
+            document.getElementById("op_110").innerHTML = "";
+            for (let i = 0, j = api_data.length-1; i < api_data.length; j--, i++) {
+                document.getElementById("op_110").insertAdjacentHTML('afterbegin', `<img onclick="set_image_number(${j})" class="imma_op" src="${api_data[i].src.tiny}">`)
+            }
+        }
+
+        const searching_image = () => {
+            let searched_image = document.getElementById("search_image_op").value;
+            if (searched_image != "") {
+                let url = "https://api.pexels.com/v1/search?query=" + searched_image;
+                fetch(url, {
+                    headers: {
+                        Authorization: "563492ad6f9170000100000102d6d6668263493fbad18856624fc0e0"
+                    }
+                })
+                    .then(resp => {
+                        return resp.json()
+                    })
+                    .then(data => {
+                        api_data = data.photos;
+                        if(data.photos.length!=0)
+                        {
+                          set_api_photos();
+                        }
+                        else
+                        {   document.getElementById("search_image_op").value="";
+                            document.getElementById("op_110").innerHTML="";
+                            alert(`Please Enter Simple Keyword For Image Search`);
+                        }
+                        
+                    }).catch((err) => {
+                        alert(`Please Enter Valid Choice`);
+                    });
+            }
+            else {
+                alert(`Please Enter Your Image Choice`);
+            }
+        }
+
+
+
+        const create_room1 = (user_data1) => {
+            socket.emit('create_room_op', user_data1)
+            console.log(`okkk`)
+        }
+
+        const join_room1 = (user_data1) => {
+            try {
+                socket.emit('receive_users_data', user_data1)
+                console.log(`opp`)
+
+            }
+            catch (err) {
+                console.log(err)
+            }
+        }
+
+        const send_details = (choice_of_user) => {
+            let name_of_user = document.getElementById("user_name").value;
+            let room_name1 = document.getElementById("room_detail").value;
+            let user_data1 = {
+                'name': name_of_user,
+                'room': room_name1,
+                'profile_pic': selected_image_details.image_src
+            }
+
+            if (name_of_user != "" && room_name1 != "" && profile_select != 0) {
+                sessionStorage.setItem('user_name1', JSON.stringify(user_data1))
+                if (choice_of_user == "1") {
+                    join_room1(user_data1);
+                }
+                else if (choice_of_user == "2") {
+                    create_room1(user_data1);
+                }
+
+            } else {
+                alert(`Please Fill All Details`);
+            }
+
+        }
+
+        socket.on('result_on_room', (res_data) => {
+            if (res_data == "yes") {
+                window.location.href = "/logg";
+                console.log("ppppp")
+            }
+            else {
+                alert(`There Is Already Room Available Of Your Room Name`);
+            }
+
+        })
+
+        socket.on('response_10', (data10) => {
+            if (data10 == "yes") {
+                window.location.href = "/logg";
+            }
+            else if (data10 == "no_room") {
+                alert(`Your Entered Room Does Not Exists`)
+            }
+            else if (data10 == "no_name") {
+                alert(`Your Username Already Exists, Change Your Username`)
+            }
+            console.log(data10)
+        })
+
+
+    </script>
+</body>
+
+</html>
