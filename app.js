@@ -10,7 +10,7 @@ app.set('view engine', 'hbs');
 app.get('/', (req, res) => {
   res.render("index");
 });
-app.get('/logg', (req, res) => {
+app.get('/chat', (req, res) => {
   res.render("logg");
 })
 app.get('/404sorry', (req, res) => {
